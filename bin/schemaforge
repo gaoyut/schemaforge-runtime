@@ -1,0 +1,18 @@
+#!/bin/sh
+set -eu
+
+FLYWAY_BIN="${FLYWAY_BIN:-/flyway/flyway}"
+
+if [ "$#" -eq 0 ]; then
+  set -- migrate
+fi
+
+case "$1" in
+  migrate|validate|info|baseline|repair|clean)
+    : "${FLYWAY_URL:?FLYWAY_URL is required for database operations}"
+    : "${FLYWAY_USER:?FLYWAY_USER is required for database operations}"
+    : "${FLYWAY_PASSWORD:?FLYWAY_PASSWORD is required for database operations}"
+    ;;
+esac
+
+exec "$FLYWAY_BIN" "$@"
