@@ -26,6 +26,9 @@ The default image is `schemaforge-runtime:13.4.0`. Override versions explicitly:
 make build FLYWAY_VERSION=13.4.0 IMAGE_TAG=13.4.0
 ```
 
+The Redgate `13.4.0` image is currently published for `linux/amd64`. The Makefile
+therefore defaults to that platform; Docker Desktop emulates it on Apple Silicon.
+
 ## Use from an application schema repository
 
 ```dockerfile

@@ -1,6 +1,7 @@
 IMAGE_NAME ?= schemaforge-runtime
 FLYWAY_VERSION ?= 13.4.0
 IMAGE_TAG ?= $(FLYWAY_VERSION)
+PLATFORM ?= linux/amd64
 AWS_REGION ?= ap-southeast-1
 ECR_NAMESPACE ?= platform
 GIT_SHA := $(shell git rev-parse --short HEAD 2>/dev/null || printf unknown)
@@ -12,12 +13,13 @@ test:
 
 build:
 	docker build \
+		--platform $(PLATFORM) \
 		--build-arg FLYWAY_VERSION=$(FLYWAY_VERSION) \
 		--build-arg VCS_REF=$(GIT_SHA) \
 		-t $(IMAGE_NAME):$(IMAGE_TAG) .
 
 smoke:
-	docker run --rm --entrypoint /flyway/flyway $(IMAGE_NAME):$(IMAGE_TAG) -v
+	docker run --rm --platform $(PLATFORM) --entrypoint /flyway/flyway $(IMAGE_NAME):$(IMAGE_TAG) -v
 
 ecr-login:
 	@test -n "$(AWS_ACCOUNT_ID)" || (echo "AWS_ACCOUNT_ID is required" >&2; exit 1)
